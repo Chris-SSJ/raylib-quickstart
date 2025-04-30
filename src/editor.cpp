@@ -2,6 +2,7 @@
 #include "square.h"
 #include "Circle.h"
 #include "Image.h"
+#include "triangle.h"
 
 
 Editor::Editor()
@@ -39,6 +40,21 @@ void Editor::Update()
 		m_size = std::max(m_size,1.0f);
 	}
 	m_shape->SetSize(m_size);
+
+
+
+	if (IsKeyDown(KEY_R)) {
+		m_rotate += 5.0f; // Rotate clockwise
+		if (m_rotate > 360.0f) m_rotate -= 360.0f;
+	}
+
+	if (IsKeyDown(KEY_E)) {
+		m_rotate -= 5.0f; // Rotate counter-clockwise
+		if (m_rotate < 0.0f) m_rotate += 360.0f;
+	}
+
+	// Apply rotation to current shape
+	m_shape->SetRotation(m_rotate);
 
 
 
@@ -86,6 +102,9 @@ Shape* Editor::Create(Shape::Type type)
 	case Shape::Type::Image:
 		shape = new ImageShape(m_textures[m_textureIndex],GetMousePosition(),m_size,m_colors[m_colorIndex]);
 			break;
+	case Shape::Type::Triangle:
+		shape = new Triangle(GetMousePosition(), m_size, m_colors[m_colorIndex]);
+		break;
 	default:
 		break;
 	}

@@ -30,7 +30,7 @@ private:
 	//textures
 
 	std::vector<Texture2D> m_textures;
-	int m_textureIndex;
+	int m_textureIndex = 0;
 
 	Shape* m_shape = nullptr;
 	std::vector<Shape*> m_shapes;
