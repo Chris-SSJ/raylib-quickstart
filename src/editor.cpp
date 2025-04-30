@@ -1,0 +1,106 @@
+#include "editor.h"
+#include "square.h"
+#include "Circle.h"
+
+
+Editor::Editor()
+{
+	m_shape = Create(m_type);
+}
+
+Editor::~Editor()
+{
+	ClearAll();
+	delete m_shape;
+}
+
+void Editor::Draw()
+{
+	//Draw editor shapes
+	for (auto shape : m_shapes) {
+		shape->Draw();
+	}
+	//draw current shape
+	m_shape->Draw();
+}
+
+void Editor::Update()
+{
+	//Scale Shape
+	if (IsKeyDown(KEY_RIGHT)) {
+		m_size += 90.0f;
+		m_size = std::min(m_size, 100.0f);
+	}
+
+	if (IsKeyDown(KEY_LEFT)) {
+		m_size -= 90.0f;
+		m_size = std::max(m_size,1.0f);
+	}
+	m_shape->SetSize(m_size);
+
+	if (IsKeyPressed(KEY_R)) {
+		m_rotate += 1.5f;
+
+	}
+
+	if (IsKeyPressed(KEY_E)) {
+		m_rotate -= 1.5f;
+	}
+
+
+
+	if(IsKeyPressed(KEY_UP)){
+		m_colorIndex++;
+		m_colorIndex = m_colorIndex % m_colors.size();
+		m_shape->SetColor(m_colors[m_colorIndex]);
+	}
+
+	if (IsKeyPressed(KEY_TAB)) {
+		m_type = static_cast<Shape::Type>((static_cast<int>(m_type) +1) % static_cast<int>(Shape::Type::NumShapes));
+		delete m_shape;
+		m_shape = Create(m_type);
+	}
+
+	if (IsMouseButtonPressed(0) || (IsMouseButtonDown(0)&& IsKeyDown(KEY_LEFT_CONTROL))) {
+		//add current shape
+		m_shapes.push_back(m_shape);
+		//create new shape
+		m_shape = Create(m_type);
+	}
+
+	m_shape->SetPostion(GetMousePosition());
+	//update editor shapes
+	for (auto shape : m_shapes) {
+		shape->Update();
+	}
+	m_shape->Update();
+
+}
+
+Shape* Editor::Create(Shape::Type type)
+{
+	Shape* shape = nullptr;
+
+	switch (type)
+	{
+	case Shape::Type::Circle:
+		shape = new Circle(GetMousePosition(), m_size, m_colors[m_colorIndex],m_rotate);
+		break;
+	case Shape::Type::Square:
+		shape = new Square(GetMousePosition(), m_size, m_colors[m_colorIndex],m_rotate);
+		break;
+	default:
+		break;
+	}
+
+
+	return shape;
+}
+
+void Editor::ClearAll()
+{
+	for (auto shape : m_shapes) {
+		delete shape;
+	}
+	m_shapes.clear();
+}

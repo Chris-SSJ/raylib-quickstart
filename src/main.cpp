@@ -6,28 +6,37 @@ Use this as a starting point or replace it with your code.
 by Jeffery Myers is marked with CC0 1.0. To view a copy of this license, visit https://creativecommons.org/publicdomain/zero/1.0/
 
 */
-
+#include "editor.h"
 #include "raylib.h"
-
+#include "math.h"
+#include<vector>
 #include "resource_dir.h"	// utility header for SearchAndSetResourceDir
+
+
 
 int main ()
 {
+	const int screen_width = 1280;
+	const int screen_height = 800;
 	// Tell the window to use vsync and work on high DPI displays
 	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 
 	// Create the window and OpenGL context
-	InitWindow(1280, 800, "Hello Raylib");
+	InitWindow(screen_width, screen_height, "Hello Raylib");
 
 	// Utility function from resource_dir.h to find the resources folder and set it as the current working directory so we can load from it
 	SearchAndSetResourceDir("resources");
 
 	// Load a texture from the resources directory
 	Texture wabbit = LoadTexture("wabbit_alpha.png");
+
+	Editor editor;
 	
 	// game loop
 	while (!WindowShouldClose())		// run the loop untill the user presses ESCAPE or presses the Close button on the window
 	{
+		editor.Update();
+
 		// drawing
 		BeginDrawing();
 
@@ -37,8 +46,24 @@ int main ()
 		// draw some text using the default font
 		DrawText("Hello Raylib", 200,200,20,WHITE);
 
-		// draw our texture to the screen
+		//float rate = 3.0f;
+
+		//	float amplitude = 2.0f;
+		//// draw our texture to the screen
+		//for (int i = 0;i < screen_width;i+=50) {
+
+		//	int y = screen_height / 2 + (tanf((GetTime()*2)+i/1.0f) * 100);
+		//	float scale = 0.5f + (sinf(GetTime() * rate) + (i / 50.0f)*amplitude);
+		//	//DrawTexture(wabbit, i , y , WHITE);
+		//	Vector2 v;
+		//	v.x = i;
+		//	v.y = y;
+		//	DrawTextureEx(wabbit, v, 0, 0.2f, WHITE);
+		//}
 		DrawTexture(wabbit, 400, 200, WHITE);
+
+
+		editor.Draw();
 		
 		// end the frame and get ready for the next one  (display frame, poll input, etc...)
 		EndDrawing();
