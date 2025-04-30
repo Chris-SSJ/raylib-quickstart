@@ -1,10 +1,12 @@
 #include "editor.h"
 #include "square.h"
 #include "Circle.h"
+#include "Image.h"
 
 
 Editor::Editor()
 {
+	m_textures.push_back(LoadTexture("wabbit_alpha.png"));
 	m_shape = Create(m_type);
 }
 
@@ -28,24 +30,16 @@ void Editor::Update()
 {
 	//Scale Shape
 	if (IsKeyDown(KEY_RIGHT)) {
-		m_size += 90.0f;
+		m_size += 1.5f;
 		m_size = std::min(m_size, 100.0f);
 	}
 
 	if (IsKeyDown(KEY_LEFT)) {
-		m_size -= 90.0f;
+		m_size -= 1.5f;
 		m_size = std::max(m_size,1.0f);
 	}
 	m_shape->SetSize(m_size);
 
-	if (IsKeyPressed(KEY_R)) {
-		m_rotate += 1.5f;
-
-	}
-
-	if (IsKeyPressed(KEY_E)) {
-		m_rotate -= 1.5f;
-	}
 
 
 
@@ -84,11 +78,14 @@ Shape* Editor::Create(Shape::Type type)
 	switch (type)
 	{
 	case Shape::Type::Circle:
-		shape = new Circle(GetMousePosition(), m_size, m_colors[m_colorIndex],m_rotate);
+		shape = new Circle(GetMousePosition(), m_size, m_colors[m_colorIndex]);
 		break;
 	case Shape::Type::Square:
-		shape = new Square(GetMousePosition(), m_size, m_colors[m_colorIndex],m_rotate);
+		shape = new Square(GetMousePosition(), m_size, m_colors[m_colorIndex]);
 		break;
+	case Shape::Type::Image:
+		shape = new ImageShape(m_textures[m_textureIndex],GetMousePosition(),m_size,m_colors[m_colorIndex]);
+			break;
 	default:
 		break;
 	}

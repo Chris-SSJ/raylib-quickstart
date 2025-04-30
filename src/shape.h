@@ -7,15 +7,15 @@ public:
 	enum class Type {
 		Circle,
 		Square,
+		Image,
 		NumShapes
 	};
 public:
 	Shape() = default;
-	Shape(const Vector2& position, float size = 20, const Color& color = WHITE, float rotate = 90.0f) :
+	Shape(const Vector2& position, float size = 20, const Color& color = WHITE) :
 		m_position{ position },
 		m_size{ size },
-		m_color{ color },
-		m_rotate{ rotate }
+		m_color{ color }
 	{
 
 	}
@@ -37,5 +37,4 @@ protected:
 	Vector2 m_position{ 0,0 };
 	float m_size = 20;
 	Color m_color = WHITE;
-	float m_rotate;
 };

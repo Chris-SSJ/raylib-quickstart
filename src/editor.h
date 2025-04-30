@@ -27,6 +27,11 @@ private:
 	const std::array< Color ,3> m_colors = { WHITE,BLUE,GREEN };
 	int m_colorIndex = 0;
 
+	//textures
+
+	std::vector<Texture2D> m_textures;
+	int m_textureIndex;
+
 	Shape* m_shape = nullptr;
 	std::vector<Shape*> m_shapes;
 
