@@ -44,7 +44,6 @@ int main ()
 		ClearBackground(BLACK);
 
 		// draw some text using the default font
-		DrawText("Hello Raylib", 200,200,20,WHITE);
 
 		//float rate = 3.0f;
 
@@ -60,7 +59,7 @@ int main ()
 		//	v.y = y;
 		//	DrawTextureEx(wabbit, v, 0, 0.2f, WHITE);
 		//}
-		DrawTexture(wabbit, 400, 200, WHITE);
+		//DrawTexture(wabbit, 400, 200, WHITE);
 
 
 		editor.Draw();

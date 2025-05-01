@@ -21,7 +21,7 @@ private:
 
 
 private:
-	float m_rotate;
+	float m_rotate = 0;
 	float m_size = 20;
 	Shape::Type m_type = Shape::Type::Circle;
 	const std::array< Color ,3> m_colors = { WHITE,BLUE,GREEN };

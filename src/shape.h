@@ -9,6 +9,7 @@ public:
 		Square,
 		Image,
 		Triangle,
+		Brush,
 		NumShapes
 	};
 public:

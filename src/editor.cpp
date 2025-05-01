@@ -3,7 +3,9 @@
 #include "Circle.h"
 #include "Image.h"
 #include "triangle.h"
-
+#include "brush.h"
+#include <iostream>
+using namespace std;
 
 Editor::Editor()
 {
@@ -19,6 +21,40 @@ Editor::~Editor()
 
 void Editor::Draw()
 {
+
+
+
+	// Draw current shape
+	const char* shapeName = "";
+
+	switch (m_type) {
+	case Shape::Type::Circle:   shapeName = "Circle"; break;
+	case Shape::Type::Square:   shapeName = "Square"; break;
+	case Shape::Type::Triangle: shapeName = "Triangle"; break;
+	case Shape::Type::Image:    shapeName = "Image"; break;
+	case Shape::Type::Brush:    shapeName = "Brush"; break;
+	default:                    shapeName = "Unknown"; break;
+	}
+
+	DrawText(TextFormat("Shape: %s", shapeName), 10, 50, 20, WHITE);
+
+
+	const char* rotateText = TextFormat("Rotation: %d", (int)m_rotate);
+	DrawText(rotateText, 10, 220, 20, WHITE);
+
+	const char* sizeText = TextFormat("Size: %d", (int)m_size);
+	DrawText(sizeText, 10, 200, 20, WHITE);
+
+	const char* clearText = "Press D To clear all";
+	DrawText(clearText, 10, 130, 20, WHITE);
+
+	const char* rotationText = "Press E & R to Rotate";
+	DrawText(rotationText, 10, 150, 20, WHITE);
+
+	const char* shapeText = "Press Tab to switch shapes";
+	DrawText(shapeText, 10, 170, 20, WHITE);
+
+
 	//Draw editor shapes
 	for (auto shape : m_shapes) {
 		shape->Draw();
@@ -71,11 +107,18 @@ void Editor::Update()
 		m_shape = Create(m_type);
 	}
 
-	if (IsMouseButtonPressed(0) || (IsMouseButtonDown(0)&& IsKeyDown(KEY_LEFT_CONTROL))) {
-		//add current shape
+	if (m_type != Shape::Type::Brush &&
+		(IsMouseButtonPressed(0) || (IsMouseButtonDown(0) && IsKeyDown(KEY_LEFT_CONTROL)))) {
 		m_shapes.push_back(m_shape);
-		//create new shape
 		m_shape = Create(m_type);
+	}
+	else if (m_type == Shape::Type::Brush && IsMouseButtonReleased(0)) {
+		m_shapes.push_back(m_shape);
+		m_shape = Create(m_type);
+	}
+
+	if (IsKeyPressed(KEY_D)) {
+		ClearAll();
 	}
 
 	m_shape->SetPostion(GetMousePosition());
@@ -84,6 +127,10 @@ void Editor::Update()
 		shape->Update();
 	}
 	m_shape->Update();
+
+
+
+
 
 }
 
@@ -104,6 +151,9 @@ Shape* Editor::Create(Shape::Type type)
 			break;
 	case Shape::Type::Triangle:
 		shape = new Triangle(GetMousePosition(), m_size, m_colors[m_colorIndex]);
+		break;
+	case Shape::Type::Brush:
+		shape = new Brush(m_colors[m_colorIndex]);
 		break;
 	default:
 		break;
